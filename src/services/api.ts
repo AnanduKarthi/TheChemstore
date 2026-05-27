@@ -1,6 +1,6 @@
-import { Job, Product } from '../types';
-import { jobs } from '../data/jobs';
-import { products } from '../data/products';
+import { Job, Product } from '@/types';
+import { jobs } from '@/data/jobs';
+import { products } from '@/data/products';
 
 // These functions return dummy data but simulate an async API layer
 export const getJobs = async (): Promise<Job[]> => {

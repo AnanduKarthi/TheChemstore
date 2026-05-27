@@ -1,5 +1,5 @@
 import { GraduationCap, CheckCircle, ArrowRight } from 'lucide-react';
-import { OptimizedImage } from '../../components/ui/OptimizedImage';
+import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
 const features = [
   'Expert faculty with 15+ years experience',
@@ -29,9 +29,7 @@ export function TuitionAcademy() {
           <div className="order-1 md:order-2">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#10B981] bg-opacity-10 rounded-full mb-6">
               <GraduationCap className="w-5 h-5 text-[#10B981]" />
-              <span className="text-brand-emerald text-sm font-semibold">
-                The Academy
-              </span>
+              <span className="text-brand-emerald text-sm font-semibold">The Academy</span>
             </div>
 
             <h2 className="text-brand-navy mb-4 text-[42px] font-bold leading-tight">
@@ -39,16 +37,15 @@ export function TuitionAcademy() {
             </h2>
 
             <p className="text-gray-600 mb-8 text-lg leading-[1.7]">
-              Join our elite coaching program designed for high school students preparing for competitive exams. Get personalized guidance from top educators.
+              Join our elite coaching program designed for high school students preparing for
+              competitive exams. Get personalized guidance from top educators.
             </p>
 
             <div className="space-y-4 mb-8">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-[#10B981] flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 text-base">
-                    {feature}
-                  </span>
+                  <span className="text-gray-700 text-base">{feature}</span>
                 </div>
               ))}
             </div>

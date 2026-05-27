@@ -1,8 +1,7 @@
 import { MapPin, Clock, ArrowRight } from 'lucide-react';
 
-import { jobs } from '../../data/jobs';
-import { categories } from '../../data/categories';
-
+import { jobs } from '@/data/jobs';
+import { categories } from '@/data/categories';
 
 export function JobFeed() {
   return (
@@ -37,10 +36,10 @@ export function JobFeed() {
               className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-brand-emerald transition-all cursor-pointer group"
             >
               <div className="flex gap-4">
-                <div className={`w-14 h-14 ${job.logoColor} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                  <span className="text-white text-2xl font-bold">
-                    {job.logo}
-                  </span>
+                <div
+                  className={`w-14 h-14 ${job.logoColor} rounded-lg flex items-center justify-center flex-shrink-0`}
+                >
+                  <span className="text-white text-2xl font-bold">{job.logo}</span>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-brand-navy mb-1 group-hover:text-brand-emerald transition-colors text-xl font-semibold">
@@ -56,9 +55,7 @@ export function JobFeed() {
                       <Clock className="w-4 h-4" />
                       {job.posted}
                     </div>
-                    <div className="px-2 py-0.5 bg-gray-100 rounded text-gray-700">
-                      {job.type}
-                    </div>
+                    <div className="px-2 py-0.5 bg-gray-100 rounded text-gray-700">{job.type}</div>
                   </div>
                 </div>
               </div>

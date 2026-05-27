@@ -14,7 +14,8 @@ export function ProductPromoBanner() {
               Chemistry Previous Year Questions Guide
             </h2>
             <p className="text-gray-300 mb-6 max-w-xl text-lg leading-relaxed">
-              Comprehensive collection of solved chemistry problems from JEE, NEET, and competitive exams. Perfect for exam preparation.
+              Comprehensive collection of solved chemistry problems from JEE, NEET, and competitive
+              exams. Perfect for exam preparation.
             </p>
             <button className="bg-brand-emerald hover:bg-brand-emerald-dark text-white px-8 py-3 rounded-lg inline-flex items-center gap-2 transition-colors text-base font-semibold">
               <Download className="w-5 h-5" />
@@ -29,16 +30,10 @@ export function ProductPromoBanner() {
                 <div className="bg-white rounded-lg p-8 aspect-[3/4] flex flex-col items-center justify-center gap-4">
                   <BookOpen className="w-24 h-24 text-brand-navy" />
                   <div className="text-center">
-                    <div className="text-brand-navy text-2xl font-bold">
-                      Chemistry
-                    </div>
-                    <div className="text-brand-navy text-lg">
-                      PYQ Guide 2026
-                    </div>
+                    <div className="text-brand-navy text-2xl font-bold">Chemistry</div>
+                    <div className="text-brand-navy text-lg">PYQ Guide 2026</div>
                   </div>
-                  <div className="text-gray-600 text-sm">
-                    500+ Solved Problems
-                  </div>
+                  <div className="text-gray-600 text-sm">500+ Solved Problems</div>
                 </div>
               </div>
             </div>

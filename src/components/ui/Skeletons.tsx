@@ -11,7 +11,9 @@ export function JobFeedSkeleton() {
           <SkeletonBlock className="h-5 w-72" />
         </div>
         <div className="flex justify-center gap-3 mb-12">
-          {Array.from({ length: 5 }, (_, i) => <SkeletonBlock key={i} className="h-10 w-28 rounded-full" />)}
+          {Array.from({ length: 5 }, (_, i) => (
+            <SkeletonBlock key={i} className="h-10 w-28 rounded-full" />
+          ))}
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {Array.from({ length: 4 }, (_, i) => (
@@ -57,7 +59,9 @@ export function AcademySkeleton() {
           <SkeletonBlock className="h-6 w-32 rounded-full" />
           <SkeletonBlock className="h-10 w-full" />
           <SkeletonBlock className="h-20 w-full" />
-          {Array.from({ length: 4 }, (_, i) => <SkeletonBlock key={i} className="h-5 w-3/4" />)}
+          {Array.from({ length: 4 }, (_, i) => (
+            <SkeletonBlock key={i} className="h-5 w-3/4" />
+          ))}
           <div className="flex gap-4 pt-4">
             <SkeletonBlock className="h-12 w-44" />
             <SkeletonBlock className="h-12 w-36" />
@@ -104,7 +108,9 @@ export function FooterSkeleton() {
           <SkeletonBlock className="h-12 w-full !bg-gray-600" />
         </div>
         <div className="flex justify-end items-center gap-4">
-          {Array.from({ length: 4 }, (_, i) => <SkeletonBlock key={i} className="w-10 h-10 rounded-full !bg-gray-600" />)}
+          {Array.from({ length: 4 }, (_, i) => (
+            <SkeletonBlock key={i} className="w-10 h-10 rounded-full !bg-gray-600" />
+          ))}
         </div>
       </div>
     </footer>

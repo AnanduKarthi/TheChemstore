@@ -1,16 +1,14 @@
 import { ExternalLink, Star } from 'lucide-react';
-import { OptimizedImage } from '../../components/ui/OptimizedImage';
+import { OptimizedImage } from '@/components/ui/OptimizedImage';
 
-import { products } from '../../data/products';
+import { products } from '@/data/products';
 
 export function RecommendedProducts() {
   return (
     <section className="py-20 bg-white" id="bookstore">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
-          <h2 className="text-brand-navy mb-3 text-[42px] font-bold">
-            Recommended Products
-          </h2>
+          <h2 className="text-brand-navy mb-3 text-[42px] font-bold">Recommended Products</h2>
           <p className="text-gray-600 text-lg">
             Curated lab equipment and textbooks from trusted vendors
           </p>
@@ -41,9 +39,7 @@ export function RecommendedProducts() {
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     <span className="text-sm font-semibold">{product.rating}</span>
                   </div>
-                  <span className="text-gray-500 text-sm">
-                    ({product.reviews} reviews)
-                  </span>
+                  <span className="text-gray-500 text-sm">({product.reviews} reviews)</span>
                 </div>
                 <button className="w-full bg-gray-900 hover:bg-brand-emerald text-white py-2.5 rounded-lg transition-colors inline-flex items-center justify-center gap-2 text-[15px] font-semibold">
                   View on Amazon

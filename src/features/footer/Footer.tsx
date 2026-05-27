@@ -1,4 +1,5 @@
 import { Mail, Linkedin, Twitter, Facebook, Instagram } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 export function Footer() {
   return (
@@ -7,16 +8,19 @@ export function Footer() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Newsletter Signup */}
           <div>
-            <h3 className="mb-3 text-2xl font-bold">
-              Never Miss an Exam Update
-            </h3>
+            <h3 className="mb-3 text-2xl font-bold">Never Miss an Exam Update</h3>
             <p className="text-gray-300 mb-6 text-base">
-              Get the latest chemistry job postings, exam notifications, and study resources delivered to your inbox
+              Get the latest chemistry job postings, exam notifications, and study resources
+              delivered to your inbox
             </p>
             <div className="flex gap-3">
               <div className="flex-1 flex items-center gap-3 px-4 py-3 bg-white/10 rounded-lg border border-white/20">
+                <Label htmlFor="newsletter-email" className="sr-only">
+                  Email address
+                </Label>
                 <Mail className="w-5 h-5 text-gray-300" />
                 <input
+                  id="newsletter-email"
                   type="email"
                   placeholder="Enter your email"
                   className="flex-1 bg-transparent outline-none text-white placeholder-gray-400"
@@ -67,9 +71,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm">
-              © 2026 TheChemstore. All rights reserved.
-            </p>
+            <p className="text-gray-400 text-sm">© 2026 TheChemstore. All rights reserved.</p>
             <div className="flex gap-6">
               <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">
                 Privacy Policy
