@@ -1,5 +1,8 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router';
+import { Toaster } from 'sonner';
+import { useAuthStore } from '@/stores/authStore';
+import { VerifyEmailPage } from '@/features/auth/VerifyEmailPage';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import {
   JobFeedSkeleton,
@@ -74,13 +77,20 @@ function Home() {
 }
 
 export default function App() {
+  // Confirm any stored session once on app start.
+  useEffect(() => {
+    useAuthStore.getState().bootstrap();
+  }, []);
+
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-white">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
         </Routes>
       </div>
+      <Toaster richColors position="top-center" />
     </BrowserRouter>
   );
 }
