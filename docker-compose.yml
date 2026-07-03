@@ -1,0 +1,63 @@
+# Local development setup — starts frontend, backend, and MongoDB together.
+#
+#   1. cp backend/.env.example backend/.env   (one-time)
+#   2. docker compose up --build
+#
+# Frontend:  http://localhost:5173
+# Backend:   http://localhost:5000   (API docs: http://localhost:5000/api-docs)
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    # Secrets (JWT, email, RapidAPI, Gemini...) come from backend/.env
+    env_file:
+      - ./backend/.env
+    # These override .env so the containers wire up correctly
+    environment:
+      PORT: "5000"
+      MONGODB_URI: mongodb://mongo:27017/thechemstore
+      CLIENT_URL: http://localhost:5173
+    ports:
+      - "5000:5000"
+    # Bind-mount source for hot-reload; keep container's node_modules
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "require('http').get('http://localhost:5000/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: http://localhost:5000/api
+    ports:
+      - "5173:5173"
+    # Bind-mount source for HMR; keep container's node_modules
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
