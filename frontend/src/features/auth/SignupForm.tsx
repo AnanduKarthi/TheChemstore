@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,10 +16,10 @@ import {
 } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
 import { signup } from '@/services/authApi';
-import { ApiError } from '@/types/auth';
 import { signupSchema, type SignupFormValues } from '@/features/auth/schemas';
-import { applyFieldErrors } from '@/features/auth/formUtils';
+import { handleAuthApiError } from '@/features/auth/formUtils';
 import { authInputClass, authLinkClass, authPrimaryButtonClass } from '@/features/auth/ui';
+import { EmailField } from '@/features/auth/EmailField';
 
 interface SignupFormProps {
   /** Called after a successful signup, with the email a verification link was sent to. */
@@ -54,30 +53,10 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
       });
       onSuccess(values.email);
     } catch (err) {
-      if (!(err instanceof ApiError)) {
-        toast.error('Something went wrong. Please try again.');
-        return;
-      }
-      if (err.status === 409) {
-        form.setError('email', { message: err.message });
-        return;
-      }
-      if (err.status === 422) {
-        const applied = applyFieldErrors(err, form.setError, [
-          'firstName',
-          'lastName',
-          'email',
-          'phoneNumber',
-          'password',
-        ]);
-        if (!applied) form.setError('root', { message: err.message });
-        return;
-      }
-      if (err.isNetworkError) {
-        toast.error(err.message);
-        return;
-      }
-      form.setError('root', { message: err.message });
+      handleAuthApiError(err, form.setError, {
+        knownFields: ['firstName', 'lastName', 'email', 'phoneNumber', 'password'],
+        onStatus: { 409: (e) => form.setError('email', { message: e.message }) },
+      });
     }
   }
 
@@ -121,25 +100,7 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
           />
         </div>
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  className={cn(authInputClass)}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <EmailField control={form.control} name="email" />
 
         <FormField
           control={form.control}
@@ -228,6 +189,7 @@ export function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
 
         <Button
           type="submit"
+          variant="brand"
           className={cn(authPrimaryButtonClass)}
           disabled={form.formState.isSubmitting}
         >

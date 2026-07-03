@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { Loader2, MailX } from 'lucide-react';
 import { toast } from 'sonner';
@@ -23,8 +23,14 @@ export function VerifyEmailPage() {
     token ? '' : 'This verification link is missing its token.'
   );
 
+  // Verification tokens are single-use: guard against calling verifyEmail
+  // twice for the same token (React 18 StrictMode double-invokes effects in
+  // dev, and this also protects against any other remount).
+  const verifiedTokenRef = useRef<string | null>(null);
+
   useEffect(() => {
-    if (!token) return;
+    if (!token || verifiedTokenRef.current === token) return;
+    verifiedTokenRef.current = token;
     let active = true;
 
     verifyEmail(token)

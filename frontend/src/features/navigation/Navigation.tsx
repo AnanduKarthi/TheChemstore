@@ -28,7 +28,7 @@ const navLinks = [
 
 export function Navigation() {
   const user = useAuthStore((s) => s.user);
-  const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
+  const isAuthenticated = user != null;
   const logout = useAuthStore((s) => s.logout);
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>('login');

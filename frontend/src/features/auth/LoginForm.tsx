@@ -10,10 +10,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/stores/authStore';
 import { login } from '@/services/authApi';
-import { ApiError } from '@/types/auth';
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas';
-import { applyFieldErrors } from '@/features/auth/formUtils';
+import { handleAuthApiError } from '@/features/auth/formUtils';
 import { authInputClass, authLinkClass, authPrimaryButtonClass } from '@/features/auth/ui';
+import { EmailField } from '@/features/auth/EmailField';
 import { ResendButton } from '@/features/auth/ResendVerification';
 
 interface LoginFormProps {
@@ -40,25 +40,10 @@ export function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProps) {
       toast.success(`Welcome back, ${res.data.firstName}!`);
       onSuccess();
     } catch (err) {
-      if (!(err instanceof ApiError)) {
-        toast.error('Something went wrong. Please try again.');
-        return;
-      }
-      if (err.status === 403) {
-        setUnverifiedEmail(values.email);
-        return;
-      }
-      if (err.status === 422) {
-        const applied = applyFieldErrors(err, form.setError, ['email', 'password']);
-        if (!applied) form.setError('root', { message: err.message });
-        return;
-      }
-      if (err.isNetworkError) {
-        toast.error(err.message);
-        return;
-      }
-      // 401 invalid credentials, or any other error -> form-level message.
-      form.setError('root', { message: err.message });
+      handleAuthApiError(err, form.setError, {
+        knownFields: ['email', 'password'],
+        onStatus: { 403: () => setUnverifiedEmail(values.email) },
+      });
     }
   }
 
@@ -83,25 +68,7 @@ export function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProps) {
           </Alert>
         )}
 
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  className={cn(authInputClass)}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <EmailField control={form.control} name="email" />
 
         <FormField
           control={form.control}
@@ -125,6 +92,7 @@ export function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProps) {
 
         <Button
           type="submit"
+          variant="brand"
           className={cn(authPrimaryButtonClass)}
           disabled={form.formState.isSubmitting}
         >

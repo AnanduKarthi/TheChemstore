@@ -48,13 +48,16 @@ export function AuthDialog({ open, onOpenChange, mode }: AuthDialogProps) {
   const [view, setView] = useState<View>(mode);
   const [pendingEmail, setPendingEmail] = useState('');
 
-  // Reset to the requested mode each time the dialog transitions to open.
-  // Adjusting state during render (React's recommended pattern) instead of an
-  // effect avoids an extra commit and the set-state-in-effect lint rule.
-  const [prevOpen, setPrevOpen] = useState(open);
-  if (open !== prevOpen) {
-    setPrevOpen(open);
-    if (open) setView(mode);
+  // Reset to the requested mode during render (avoids an extra commit and
+  // the set-state-in-effect lint rule) whenever the *effective* mode changes
+  // — either the dialog just opened, or `mode` changed while already open.
+  // Tracking `open ? mode : null` (not just `open`) is what makes the second
+  // case work: comparing `open` alone would miss a mode change mid-session.
+  const effectiveMode = open ? mode : null;
+  const [prevEffectiveMode, setPrevEffectiveMode] = useState(effectiveMode);
+  if (effectiveMode !== prevEffectiveMode) {
+    setPrevEffectiveMode(effectiveMode);
+    if (effectiveMode) setView(effectiveMode);
   }
 
   return (

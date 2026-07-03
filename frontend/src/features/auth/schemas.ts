@@ -1,10 +1,16 @@
 // Client-side validation schemas. These mirror the backend express-validator
 // rules exactly so the UI rejects bad input before a round-trip, while the
 // server stays the source of truth (its 422 errors still map back to fields).
+//
+// There's no shared package between this Vite frontend and the CommonJS
+// backend, so these rules are hand-copied rather than imported from one
+// source. If you change either side, update the other:
+// backend/routes/auth.js:53-63 (the `body('phoneNumber')`/`body('password')`
+// validator chains on POST /signup) is the source of truth this file mirrors.
 
 import { z } from 'zod';
 
-// Backend: password min 8 AND must contain a lowercase, uppercase, and digit.
+// Mirrors backend/routes/auth.js:59-63 — min 8, plus lowercase/uppercase/digit.
 const passwordRules = z
   .string()
   .min(8, 'Password must be at least 8 characters')
@@ -12,7 +18,7 @@ const passwordRules = z
   .regex(/[A-Z]/, 'Include at least one uppercase letter')
   .regex(/\d/, 'Include at least one number');
 
-// Backend phone rule: /^\+?[\d\s\-()]{7,15}$/
+// Mirrors backend/routes/auth.js:53-58 — same pattern, /^\+?[\d\s\-()]{7,15}$/.
 const phoneRule = z
   .string()
   .trim()
