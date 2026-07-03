@@ -26,6 +26,10 @@ const navLinks = [
   { label: 'Resources', href: '#resources' },
 ];
 
+// Employer-facing flow isn't built yet — hide the CTA for now rather than
+// linking to a dead end. Flip back on once "Post a Job" has somewhere to go.
+const SHOW_POST_JOB_BUTTON = false;
+
 export function Navigation() {
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = user != null;
@@ -108,9 +112,11 @@ export function Navigation() {
               </button>
             )}
 
-            <button className="hidden md:flex border border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white px-6 py-2.5 rounded-lg transition-colors">
-              Post a Job
-            </button>
+            {SHOW_POST_JOB_BUTTON && (
+              <button className="hidden md:flex border border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white px-6 py-2.5 rounded-lg transition-colors">
+                Post a Job
+              </button>
+            )}
 
             {/* Mobile Navigation */}
             <Sheet>
@@ -173,11 +179,13 @@ export function Navigation() {
                         </SheetClose>
                       </>
                     )}
-                    <SheetClose asChild>
-                      <button className="border border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white px-6 py-2.5 rounded-lg transition-colors w-full text-center">
-                        Post a Job
-                      </button>
-                    </SheetClose>
+                    {SHOW_POST_JOB_BUTTON && (
+                      <SheetClose asChild>
+                        <button className="border border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-white px-6 py-2.5 rounded-lg transition-colors w-full text-center">
+                          Post a Job
+                        </button>
+                      </SheetClose>
+                    )}
                   </div>
                 </div>
               </SheetContent>

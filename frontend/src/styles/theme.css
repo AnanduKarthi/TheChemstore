@@ -141,6 +141,15 @@
 
   html {
     font-size: var(--font-size);
+    /* Scrollbar is always hidden (scrolling still works) so opening a
+       Radix Dialog/Sheet — which locks body scroll — can't cause the
+       scrollbar to appear/disappear and shift the layout. */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Edge/IE legacy */
+  }
+
+  html::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Edge (Chromium) */
   }
 
   h1 {
