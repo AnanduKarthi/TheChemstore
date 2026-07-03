@@ -98,6 +98,32 @@ export function ProductsSkeleton() {
   );
 }
 
+export function JobDetailSkeleton() {
+  return (
+    <div className="space-y-6">
+      <div className="flex gap-4">
+        <SkeletonBlock className="w-16 h-16 flex-shrink-0" />
+        <div className="flex-1 space-y-3">
+          <SkeletonBlock className="h-6 w-3/4" />
+          <SkeletonBlock className="h-4 w-1/2" />
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        <SkeletonBlock className="h-6 w-24 rounded-full" />
+        <SkeletonBlock className="h-6 w-24 rounded-full" />
+        <SkeletonBlock className="h-6 w-24 rounded-full" />
+      </div>
+      <SkeletonBlock className="h-20 w-full" />
+      <div className="space-y-2">
+        <SkeletonBlock className="h-4 w-full" />
+        <SkeletonBlock className="h-4 w-full" />
+        <SkeletonBlock className="h-4 w-2/3" />
+      </div>
+      <SkeletonBlock className="h-12 w-40" />
+    </div>
+  );
+}
+
 export function FooterSkeleton() {
   return (
     <footer className="bg-brand-navy py-16">

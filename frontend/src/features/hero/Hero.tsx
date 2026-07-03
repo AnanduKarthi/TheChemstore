@@ -1,7 +1,19 @@
+import { useState, type SubmitEvent } from 'react';
 import { Search, MapPin, Briefcase } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+import { useJobFilters } from '@/features/jobs/hooks/useJobsFeed';
 
 export function Hero() {
+  const { filters, updateFilters } = useJobFilters();
+  const [keywords, setKeywords] = useState(filters.q ?? '');
+  const [location, setLocation] = useState(filters.location ?? '');
+
+  const handleSubmit = (e: SubmitEvent) => {
+    e.preventDefault();
+    updateFilters({ q: keywords, location });
+    document.getElementById('jobs')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section className="relative bg-gradient-to-br from-gray-50 to-white py-20 md:py-32 overflow-hidden">
       {/* Subtle geometric pattern background */}
@@ -26,7 +38,10 @@ export function Hero() {
         </div>
 
         {/* Job Search Bar */}
-        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 p-3 flex flex-col md:flex-row gap-3">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 p-3 flex flex-col md:flex-row gap-3"
+        >
           <div className="flex-1 flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-lg">
             <Label htmlFor="hero-search-keywords" className="sr-only">
               Job title, keywords, or company
@@ -35,6 +50,8 @@ export function Hero() {
             <input
               id="hero-search-keywords"
               type="text"
+              value={keywords}
+              onChange={(e) => setKeywords(e.target.value)}
               placeholder="Job Title, Keywords, or Company"
               className="flex-1 bg-transparent outline-none text-gray-900 placeholder-gray-400"
             />
@@ -48,16 +65,21 @@ export function Hero() {
             <input
               id="hero-search-location"
               type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               placeholder="City, State, or Remote"
               className="flex-1 bg-transparent outline-none text-gray-900 placeholder-gray-400"
             />
           </div>
 
-          <button className="bg-brand-emerald hover:bg-brand-emerald-dark text-white px-8 py-3 rounded-lg flex items-center gap-2 justify-center transition-colors whitespace-nowrap">
+          <button
+            type="submit"
+            className="bg-brand-emerald hover:bg-brand-emerald-dark text-white px-8 py-3 rounded-lg flex items-center gap-2 justify-center transition-colors whitespace-nowrap"
+          >
             <Search className="w-5 h-5" />
             Search Jobs
           </button>
-        </div>
+        </form>
 
         {/* Quick Stats */}
         <div className="mt-16 grid grid-cols-3 gap-8 max-w-3xl mx-auto">

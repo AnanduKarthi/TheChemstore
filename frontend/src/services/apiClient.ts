@@ -44,9 +44,9 @@ function normalizeError(err: unknown): ApiError {
 }
 
 export const apiClient = {
-  async get<T>(path: string): Promise<T> {
+  async get<T>(path: string, config?: { params?: Record<string, unknown> }): Promise<T> {
     try {
-      const res = await instance.get<T>(path);
+      const res = await instance.get<T>(path, config);
       return res.data;
     } catch (err) {
       throw normalizeError(err);

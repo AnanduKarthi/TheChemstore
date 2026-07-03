@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router';
+import { BrowserRouter, Routes, Route, useLocation, type Location } from 'react-router';
 import { Toaster } from 'sonner';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores/authStore';
 import { VerifyEmailPage } from '@/features/auth/VerifyEmailPage';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
@@ -36,6 +37,12 @@ const RecommendedProducts = React.lazy(() =>
 const Footer = React.lazy(() =>
   import('@/features/footer/Footer').then((module) => ({ default: module.Footer }))
 );
+const JobDetailPage = React.lazy(() =>
+  import('@/features/jobs/JobDetailPage').then((module) => ({ default: module.JobDetailPage }))
+);
+const JobDetailModal = React.lazy(() =>
+  import('@/features/jobs/JobDetailModal').then((module) => ({ default: module.JobDetailModal }))
+);
 
 function Home() {
   return (
@@ -47,11 +54,15 @@ function Home() {
       />
       <Navigation />
       <Hero />
-      <ErrorBoundary>
-        <Suspense fallback={<JobFeedSkeleton />}>
-          <JobFeed />
-        </Suspense>
-      </ErrorBoundary>
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary onReset={reset}>
+            <Suspense fallback={<JobFeedSkeleton />}>
+              <JobFeed />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
       <ErrorBoundary>
         <Suspense fallback={<BannerSkeleton />}>
           <ProductPromoBanner />
@@ -76,6 +87,45 @@ function Home() {
   );
 }
 
+// Job detail opens as a modal over whatever page triggered it (the "background
+// location" routing pattern), so the URL is always shareable/deep-linkable —
+// visiting /jobs/:id directly (or refreshing) renders the full JobDetailPage
+// instead, since there's no background location to render behind the modal.
+function AppRoutes() {
+  const location = useLocation();
+  const backgroundLocation = (location.state as { backgroundLocation?: Location } | null)
+    ?.backgroundLocation;
+
+  return (
+    <>
+      <Routes location={backgroundLocation ?? location}>
+        <Route path="/" element={<Home />} />
+        <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
+        <Route
+          path="/jobs/:id"
+          element={
+            <Suspense fallback={null}>
+              <JobDetailPage />
+            </Suspense>
+          }
+        />
+      </Routes>
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path="/jobs/:id"
+            element={
+              <Suspense fallback={null}>
+                <JobDetailModal />
+              </Suspense>
+            }
+          />
+        </Routes>
+      )}
+    </>
+  );
+}
+
 export default function App() {
   // Confirm any stored session once on app start.
   useEffect(() => {
@@ -85,10 +135,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-white">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
-        </Routes>
+        <AppRoutes />
       </div>
       <Toaster richColors position="top-center" />
     </BrowserRouter>
